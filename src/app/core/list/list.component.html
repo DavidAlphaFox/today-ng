@@ -1,0 +1,37 @@
+<ul nz-menu
+    nzTheme="dark">
+  <li nz-menu-item
+      [nzSelected]="true"
+      (click)="click('today')">
+    <i class="anticon anticon-home"></i> Today
+  </li>
+  <li nz-menu-item
+      (click)="click('todo')">
+    <i class="anticon anticon-calendar"></i> To-Do
+  </li>
+  <li nz-menu-item
+      *ngFor="let list of lists"
+      (click)="click(list._id)"
+      (contextmenu)="contextMenu($event, contextTemplate, list._id)">
+    <i class="anticon anticon-bars"></i> {{ list.title }}
+  </li>
+</ul>
+
+<ng-template #contextTemplate>
+  <ul nz-menu
+      nzInDropDown
+      nzSelectable
+      (nzClick)="close($event)">
+    <li nz-menu-item
+        (click)="rename()">
+      <i class="anticon anticon-edit anticon-right-margin"></i>
+      <span>重命名</span>
+    </li>
+    <li nz-menu-divider></li>
+    <li nz-menu-item
+        (click)="delete()">
+      <i class="anticon anticon-delete anticon-right-margin danger"></i>
+      <span class="danger">删除列表</span>
+    </li>
+  </ul>
+</ng-template>

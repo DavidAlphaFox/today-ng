@@ -1,0 +1,55 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.floating-button {
+  position: fixed;
+  right: 80px;
+  bottom: 60px;
+}
+
+.detail-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 500px;
+  background: black;
+}
+
+.header-wrapper {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+
+  .username-text {
+    flex: 1;
+    padding-left: 10px;
+    color: white;
+    font-size: 14px;
+    line-height: 40px;
+    vertical-align: middle;
+  }
+
+  .header-btn {
+    color: white;
+    padding: 12px;
+  }
+}
+
+.list-wrapper {
+  overflow-y: scroll;
+  position: absolute;
+  top: 60px;
+  bottom: 48px;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.list-wrapper::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,17 @@
+.todo-item {
+  padding-left: 20px;
+}
+
+.empty-placeholder {
+  margin-top: 40px;
+  text-align: center;
+}
+
+span.strikethrough {
+  text-decoration: line-through;
+  color: #999999;
+}
+
+.todo-desc {
+  margin-right: 8px;
+}

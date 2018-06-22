@@ -1,0 +1,101 @@
+<nz-layout class="full-screen">
+  <nz-header>
+    <h1 style="color: white;">
+      Today
+    </h1>
+  </nz-header>
+  <nz-content style="padding:20px 50px;">
+    <div class="guide-text"
+         style="margin-bottom: 20px; line-height: 22px; font-size: 14px; color: grey;">
+      欢迎使用 Today，让我们来进行一些初次使用所需要的设置。
+    </div>
+    <div class="main-wrapper"
+         style="padding: 20px; border-radius: 8px; background-color: white;">
+      <nz-steps [nzCurrent]="currentStep">
+        <nz-step nzTitle="用户名"></nz-step>
+        <nz-step nzTitle="头像"></nz-step>
+        <nz-step nzTitle="完成"></nz-step>
+      </nz-steps>
+      <div class="steps-content"
+           style="margin-top: 40px;">
+        <div *ngIf="currentStep === 0"
+             style=" max-width: 500px;">
+          <input nz-input
+                 autocomplete="off"
+                 id="username"
+                 name="username"
+                 placeholder="输入一个你喜欢的名字"
+                 minlength="4"
+                 [(ngModel)]="username"
+                 #usernameInput>
+          <nz-alert *ngIf="usernameInput.errors"
+                    nzType="error"
+                    nzShowIcon
+                    nzMessage="Error message"
+                    style="margin-top: 4px;">
+          </nz-alert>
+          <button nz-button
+                  nzType="primary"
+                  [disabled]="!usernameInput.value"
+                  style="margin-top: 16px;"
+                  (click)="nextStep()">
+            下一步
+          </button>
+        </div>
+        <div *ngIf="currentStep === 1">
+          <nz-upload class="avatar-uploader"
+                     nzAction=""
+                     nzName="avatar"
+                     nzListType="picture-card"
+                     [nzShowUploadList]="false"
+                     (nzChange)="handleAvatarImageChange($event)">
+            <ng-container *ngIf="!imgCode">
+              <i class="anticon anticon-plus"></i>
+              <div class="ant-upload-text">
+                设置头像
+              </div>
+            </ng-container>
+            <img *ngIf="imgCode"
+                 [src]="imgCode"
+                 class="avatar">
+          </nz-upload>
+          <button nz-button
+                  style="margin-top: 16px; margin-right: 8px;"
+                  (click)="lastStep()">
+            上一步
+          </button>
+          <button nz-button
+                  nzType="primary"
+                  style="margin-top: 16px;"
+                  (click)="nextStep()">
+            下一步
+          </button>
+        </div>
+        <div *ngIf="currentStep === 2">
+          <p>你已经完成 Today 的设置！</p>
+          <p style="text-align: center">
+            <img *ngIf="imgCode"
+                 [src]="imgCode"
+                 class="avatar-preview">
+            <br>
+            <span style="font-size: 22px;">{{ username }}</span>
+          </p>
+          <button nz-button
+                  style="margin-top: 16px; margin-right: 8px;"
+                  (click)="lastStep()">
+            上一步
+          </button>
+          <button nz-button
+                  nzType="primary"
+                  style="margin-top: 16px;"
+                  (click)="completeSetup()">
+            开始使用
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-content>
+  <nz-footer style="text-align: center;">
+    Today © 2018 By Wendell Hu
+  </nz-footer>
+</nz-layout>

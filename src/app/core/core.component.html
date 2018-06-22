@@ -1,0 +1,129 @@
+<nz-layout class="container">
+  <nz-sider nzCollapsible
+            [(nzCollapsed)]="isCollapsed"
+            [nzWidth]="260">
+    <div class="header-wrapper">
+      <nz-avatar *ngIf="avatar"
+                 nzText="avatar"
+                 nzSize="large"
+                 [nzSrc]="avatar">
+      </nz-avatar>
+      <span class="username-text">
+        {{ username }}
+      </span>
+      <div (click)="goSettings()"
+           class="floating-btn header-btn">
+        <i class="anticon anticon-setting"></i>
+      </div>
+      <div (click)="goSummary()"
+           class="floating-btn header-btn">
+        <i class="anticon anticon-calendar"></i>
+      </div>
+    </div>
+    <div class="list-wrapper">
+      <!-- a list of 'lists' -->
+      <app-list [lists]="innerLists"
+                (clickList)="clickList($event)"
+                (renameList)="showRenameListModal($event)"
+                (deleteList)="confirmDeleteList($event)">
+      </app-list>
+      <div style="text-align: center; margin-top: 8px;">
+        <button nz-button
+                nzGhost
+                nzType="dashed"
+                (click)="showAddListModal()">
+          添加列表
+        </button>
+      </div>
+    </div>
+  </nz-sider>
+  <nz-content>
+    <nz-layout>
+      <nz-header style="background-color: white; height: 180px; padding: 0;">
+
+      </nz-header>
+      <nz-content>
+        <!-- a list of 'todos' -->
+        <app-todo-list [todos]="innerTodos"
+                       (todoClick)="handleTodoClick($event)"
+                       (todoDelete)="deleteTodo($event)"
+                       (todoToday)="setToday($event)"
+                       (todoToggle)="toggleComplete($event)">
+        </app-todo-list>
+      </nz-content>
+    </nz-layout>
+  </nz-content>
+</nz-layout>
+
+<button nz-button
+        nzType="primary"
+        nzShape="circle"
+        nzSize="large"
+        class="floating-button"
+        (click)="showAddTodoModal()">
+  <i class="anticon anticon-plus"></i>
+</button>
+
+<nz-modal [(nzVisible)]="addTodoModalVisible"
+          [nzTitle]="'添加新待办事项'"
+          [nzClosable]="true"
+          [nzWidth]="420"
+          [nzOkText]="'添加'"
+          [nzCancelText]="'取消'"
+          [nzMaskClosable]="true"
+          (nzOnCancel)="closeAddTodoModal()"
+          (nzOnOk)="handleAddTodoOk(todoInput.value); todoInput.value = '';">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-control>
+        <input nz-input
+               #todoInput
+               placeholder="想要做什么？"
+               name="todoTitle">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="addListModalVisible"
+          [nzTitle]="'添加新列表'"
+          [nzClosable]="true"
+          [nzWidth]="420"
+          [nzOkText]="'添加'"
+          [nzCancelText]="'取消'"
+          [nzMaskClosable]="true"
+          (nzOnCancel)="closeAddListModal()"
+          (nzOnOk)="handleAddListOk(listInput.value); listInput.value = '';">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-control>
+        <input nz-input
+               #listInput
+               name="listTitle">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="renameListModalVisible"
+          [nzTitle]="'重命名列表'"
+          [nzClosable]="true"
+          [nzWidth]="420"
+          [nzOkText]="'重命名'"
+          [nzCancelText]="'取消'"
+          [nzMaskClosable]="true"
+          (nzOnCancel)="closeRenameListModal()"
+          (nzOnOk)="renameList(listRenameInput.value); listRenameInput.value = '';">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-control>
+        <input nz-input
+               #listRenameInput
+               name="renameListTitle">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<!-- detail -->
+<router-outlet></router-outlet>

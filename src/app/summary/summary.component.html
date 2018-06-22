@@ -1,0 +1,32 @@
+<nz-layout class="container">
+  <nz-sider [nzWidth]="240">
+    <div class="profile-container">
+      <div class="back-btn floating-btn"
+           (click)="goBack()">
+        <span class="anticon anticon-left"></span>
+      </div>
+      <div class="avatar-container">
+
+      </div>
+      <div class="username">
+        {{ username }}
+      </div>
+      <div class="date-count">
+        已经使用 Today {{ dateCount }} 天
+      </div>
+    </div>
+  </nz-sider>
+  <nz-content>
+    <nz-calendar [nzDateCell]="monthTableCell"></nz-calendar>
+  </nz-content>
+</nz-layout>
+
+<ng-template #monthTableCell>
+  <div class="month-cell-wrapper">
+    {{ requestForDate(1) }}
+  </div>
+</ng-template>
+
+<ng-template #yearTableCell>
+  <div class="year-cell-wrapper"></div>
+</ng-template>
