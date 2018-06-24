@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { SettingComponent } from './setting.component';
-import { SummaryService } from '../services/summary/summary.service';
+import { LocalStorageService } from '../services/local-storage/local-storage.service';
+
 
 @NgModule({
-  imports: [
-    CommonModule
+  imports     : [
+    CommonModule,
+    FormsModule,
+    NgZorroAntdModule
   ],
   declarations: [ SettingComponent ],
-  providers: [ SummaryService ]
+  providers   : [ LocalStorageService ]
 })
-export class SettingModule { }
+export class SettingModule {}

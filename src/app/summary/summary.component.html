@@ -1,12 +1,13 @@
 <nz-layout class="container">
-  <nz-sider [nzWidth]="240">
+  <nz-sider [nzWidth]="260">
     <div class="profile-container">
       <div class="back-btn floating-btn"
            (click)="goBack()">
         <span class="anticon anticon-left"></span>
       </div>
-      <div class="avatar-container">
-
+      <div class="avatar-container"
+           *ngIf="avatar">
+        <img [src]="avatar">
       </div>
       <div class="username">
         {{ username }}

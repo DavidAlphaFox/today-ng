@@ -44,7 +44,7 @@ export class TodoService {
 
   setTodoToday(uuid: string): void {
     const todo = this.todos.find(t => t._id === uuid);
-    if (todo) {
+    if (todo && !todo.completedFlag) {
       todo.planAt = floorToMinute(new Date()) + ONE_HOUR;
       this.update(todo);
     }

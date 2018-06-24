@@ -4,18 +4,20 @@ import { SplashComponent } from './splash/splash.component';
 import { SummaryComponent } from './summary/summary.component';
 import { SettingComponent } from './setting/setting.component';
 import { SetupComponent } from './setup/setup.component';
+import { InitGuardService } from './services/init-guard/init-guard.service';
+
 
 const routes: Routes = [
   { path: 'welcome', component: SplashComponent },
-  { path: 'summary', component: SummaryComponent },
-  { path: 'setting', component: SettingComponent },
-  { path: 'setup', component: SetupComponent },
-  { path: 'main', redirectTo: '/main', pathMatch: 'full' },
+  { path: 'summary', component: SummaryComponent, canActivate: [ InitGuardService ] },
+  { path: 'setting', component: SettingComponent, canActivate: [ InitGuardService ] },
+  { path: 'setup', component: SetupComponent, canActivate: [ InitGuardService ] },
+  { path: 'main', redirectTo: '/main', pathMatch: 'full', canActivate: [ InitGuardService ] },
   { path: '', redirectTo: '/main', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

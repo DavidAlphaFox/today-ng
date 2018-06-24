@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { combineLatest } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd';
 import { TodoService } from '../services/todo/todo.service';
@@ -12,30 +12,44 @@ import {
   INIT_FLAG
 } from '../services/local-storage/local-storage.namespace';
 import { Todo, List } from '../../domain/entities';
+import { RankBy } from '../../domain/types';
 import { floorToDate } from '../../utils/time';
+import { mainPageSwitchTransition } from './core.animation';
+
+
+const rankerGenerator = (type: RankBy = 'title'): any => {
+  if (type === 'completeFlag') {
+    return (t1: Todo, t2: Todo) => {
+      if (t1.completedFlag && !t2.completedFlag) { return 1; }
+    };
+  }
+  return (t1: Todo, t2: Todo) => t1[ type ] > t2[ type ];
+};
 
 @Component({
-  selector: 'app-core',
+  selector   : 'app-core',
   templateUrl: './core.component.html',
-  styleUrls: [ './core.component.less' ]
+  styleUrls  : [ './core.component.less' ],
+  animations : [ mainPageSwitchTransition ]
 })
 export class CoreComponent implements OnInit, OnDestroy {
-  private isCollapsed = false;
+  isCollapsed = false;
 
   private todos$: Subscription;
   private lists$: Subscription;
-  private sort$: Subscription;
-  private filter$: Subscription;
+  private rankerSource = new Subject<RankBy>();
 
-  private innerTodos: Todo[] = [];
-  private innerLists: List[] = [];
-  private addTodoModalVisible = false;
-  private addListModalVisible = false;
-  private renameListModalVisible = false;
-  private templateListUUID: string;
-  private avatar = this.store.get(AVATAR_CODE);
-  private username = this.store.get(USERNAME);
+  addTodoModalVisible = false;
+  addListModalVisible = false;
+  renameListModalVisible = false;
+  templateListUUID: string;
 
+  innerTodos: Todo[] = [];
+  innerLists: List[] = [];
+  avatar = this.store.get(AVATAR_CODE);
+  username = this.store.get(USERNAME);
+
+  @HostBinding('@mainPageSwitchTransition') state = 'activated';
   @ViewChild('todoInput') private todoInput: ElementRef;
   @ViewChild('listRenameInput') private listRenameInput: ElementRef;
   @ViewChild('listInput') private listInput: ElementRef;
@@ -51,9 +65,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   private keyboard$: any;
 
   ngOnInit() {
-    if (!this.store.get(INIT_FLAG)) { this.router.navigateByUrl('/setup'); return; }
-    this.makeSubcriptions();
-    // We have to bind this here. Otherwise, you know this would be bind to undefined.
+    this.makeSubscriptions();
     this.keyboard$ = this.keyboardHandler.bind(this);
     window.addEventListener('keydown', this.keyboard$);
   }
@@ -64,23 +76,24 @@ export class CoreComponent implements OnInit, OnDestroy {
     window.removeEventListener('keydown', this.keyboard$);
   }
 
-  private makeSubcriptions(): void {
+  private makeSubscriptions(): void {
     const listSource = this.listService.getSubject();
-
-    this.lists$ = listSource.subscribe((lists: List[]) => {
-      this.innerLists = [].concat(lists);
-    });
-
     const currentUUIDSource = this.listService.getCurrentSubject();
     const todoSource = this.todoService.getSubject();
-    const combined = currentUUIDSource.pipe(combineLatest(todoSource));
+    const combined = currentUUIDSource.pipe(
+      combineLatest(todoSource, this.rankerSource),
+    );
 
+    this.lists$ = listSource.subscribe(lists => {
+      this.innerLists = [].concat(lists);
+    });
     this.todos$ = combined.subscribe(sources => {
-      this.processTodos(sources[ 0 ], sources[ 1 ]);
+      this.processTodos(sources[ 0 ], sources[ 1 ], sources[ 2 ]);
     });
 
     this.listService.getAll();
     this.todoService.getAll();
+    this.rankerSource.next();
   }
 
   private keyboardHandler(e: KeyboardEvent): void {
@@ -92,6 +105,7 @@ export class CoreComponent implements OnInit, OnDestroy {
 
     // command+I to create a new todo
     if (e.keyCode === 73 && (e.metaKey || e.ctrlKey)) {
+      if (e.altKey) { return; } // dev tools!
       this.showAddTodoModal();
       return;
     }
@@ -103,43 +117,42 @@ export class CoreComponent implements OnInit, OnDestroy {
     }
   }
 
-  private processTodos(uuid: string, todos: Todo[]): void {
+  private processTodos(uuid: string, todos: Todo[], rank: RankBy): void {
     const filteredTodos = todos
       .filter(todo => {
-        if (
-          uuid === 'today' &&
-          todo.planAt &&
-          floorToDate(todo.planAt) === floorToDate(new Date())
-        ) { return true; }
+        if (uuid === 'today' && todo.planAt && floorToDate(todo.planAt) === floorToDate(new Date())) { return true; }
         if (uuid === 'todo' && (!todo.listUUID || todo.listUUID === 'todo')) { return true; }
         if (uuid === todo.listUUID) { return true; }
         return false;
       })
       .map(todo => {
-        // to avoid changing source of truth unexpectly
-        // maybe we should introduce immutable-js to this project
         return Object.assign({}, todo);
-      });
+      })
+      .sort(rankerGenerator(rank));
 
     this.innerTodos = [].concat(filteredTodos);
   }
 
   /* events on modals */
-  private showAddTodoModal(): void {
+  showAddTodoModal(): void {
     this.addTodoModalVisible = true;
     setTimeout(() => { this.todoInput.nativeElement.focus(); });
   }
-  private closeAddTodoModal(): void {
+
+  closeAddTodoModal(): void {
     this.addTodoModalVisible = false;
   }
-  private showAddListModal(): void {
+
+  showAddListModal(): void {
     this.addListModalVisible = true;
     setTimeout(() => { this.listInput.nativeElement.focus(); });
   }
-  private closeAddListModal(): void {
+
+  closeAddListModal(): void {
     this.addListModalVisible = false;
   }
-  private showRenameListModal(uuid: string): void {
+
+  showRenameListModal(uuid: string): void {
     this.renameListModalVisible = true;
     this.templateListUUID = uuid;
     setTimeout(() => {
@@ -148,23 +161,25 @@ export class CoreComponent implements OnInit, OnDestroy {
       this.listRenameInput.nativeElement.focus();
     });
   }
-  private closeRenameListModal(): void {
+
+  closeRenameListModal(): void {
     this.renameListModalVisible = false;
   }
 
   /* events on lists */
-  private handleAddListOk(title: string): void {
+  handleAddListOk(title: string): void {
     if (title) { this.listService.add(title); }
     this.closeAddListModal();
   }
-  private confirmDeleteList(uuid: string): void {
+
+  confirmDeleteList(uuid: string): void {
     const i = this.innerLists.findIndex(l => l._id === uuid);
     const list = this.innerLists[ i ];
 
     this.modal.confirm({
-      nzTitle: '确认删除列表',
+      nzTitle  : '确认删除列表',
       nzContent: '该操作会导致该列表下的所有待办事项被删除',
-      nzOnOk: () =>
+      nzOnOk   : () =>
         new Promise((res, rej) => {
           this.listService.delete(uuid);
           this.todoService.deleteInList(uuid);
@@ -172,42 +187,54 @@ export class CoreComponent implements OnInit, OnDestroy {
         }).catch(() => console.error('Delete list failed'))
     });
   }
-  private renameList(title: string): void {
+
+  renameList(title: string): void {
     const list = this.innerLists.find(l => l._id === this.templateListUUID);
     list.title = title;
     this.listService.update(list);
     this.closeRenameListModal();
     this.templateListUUID = '';
   }
-  private clickList(uuid: string): void {
+
+  clickList(uuid: string): void {
     this.listService.setCurrentUUID(uuid);
   }
 
   /* events on todos */
-  private handleAddTodoOk(title: string): void {
+  handleAddTodoOk(title: string): void {
     if (title) {
       this.todoService.add(title);
     }
     this.closeAddTodoModal();
   }
-  private handleTodoClick(uuid: string): void {
+
+  handleTodoClick(uuid: string): void {
     this.router.navigateByUrl(`main/${uuid}`);
   }
-  private deleteTodo(uuid: string): void {
+
+  deleteTodo(uuid: string): void {
     this.todoService.delete(uuid);
   }
-  private setToday(uuid: string): void {
+
+  setToday(uuid: string): void {
     this.todoService.setTodoToday(uuid);
   }
-  private toggleComplete(uuid: string): void {
+
+  toggleComplete(uuid: string): void {
     this.todoService.toggleTodoComplete(uuid);
   }
 
-  /* navigations */
-  private goSummary(): void {
+  /* events from header */
+  handleRankerChange(type: RankBy): void {
+    this.rankerSource.next(type);
+  }
+
+  /* navigation */
+  goSummary(): void {
     this.router.navigateByUrl('/summary');
   }
-  private goSettings(): void {
+
+  goSettings(): void {
     this.router.navigateByUrl('/setting');
   }
 }

@@ -10,23 +10,23 @@ import {
 } from '../services/local-storage/local-storage.namespace';
 import { getTodayTime } from '../../utils/time';
 
+
 @Component({
-  selector: 'app-setup',
+  selector   : 'app-setup',
   templateUrl: './setup.component.html',
-  styleUrls: ['./setup.component.less']
+  styleUrls  : [ './setup.component.less' ]
 })
 export class SetupComponent implements OnInit {
-  private currentStep = 0;
+  currentStep = 0;
   private username: string;
   private imgCode: string;
 
-  constructor(private store: LocalStorageService, private router: Router) {}
+  constructor(
+    private store: LocalStorageService,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
-    if (!!this.store.get(INIT_FLAG)) {
-      this.router.navigateByUrl('/main');
-    }
-  }
+  ngOnInit() {}
 
   private getBase64(img: File, callback: (img: {}) => void): void {
     const reader = new FileReader();
@@ -34,22 +34,22 @@ export class SetupComponent implements OnInit {
     reader.readAsDataURL(img);
   }
 
-  private handleAvatarImageChange(info: { file: UploadFile }): void {
+  handleAvatarImageChange(info: { file: UploadFile }): void {
     // Get this url from response in real world.
     this.getBase64(info.file.originFileObj, (img: string) => {
       this.imgCode = img;
     });
   }
 
-  private lastStep() {
+  lastStep() {
     this.currentStep -= 1;
   }
 
-  private nextStep() {
+  nextStep() {
     this.currentStep += 1;
   }
 
-  private completeSetup(): void {
+  completeSetup(): void {
     this.store.set(INIT_FLAG, true);
     this.store.set(START_USING_DATE, getTodayTime());
     this.store.set(USERNAME, this.username);

@@ -1,3 +1,18 @@
-<p>
-  setting works!
-</p>
+<div class="full-screen setting-container">
+  <div class="back-btn floating-btn" (click)="goBack()">
+    <span>
+      <i class="anticon anticon-left"></i>
+    </span>
+  </div>
+  <div class="content">
+    <div class="body">
+      <div class="header">
+        <img *ngIf="avatar" [src]="avatar" class="avatar">
+        <input nz-input #usernameInput [nzSize]="'large'" placeholder="用户名" (blur)="validateUsername(usernameInput.value)">
+      </div>
+    </div>
+    <div class="sticky-footer">
+      Today © 2018 By Wendell Hu
+    </div>
+  </div>
+</div>

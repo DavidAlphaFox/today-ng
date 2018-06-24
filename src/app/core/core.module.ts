@@ -11,6 +11,7 @@ import { HeaderComponent } from './header/header.component';
 import { DetailComponent } from './detail/detail.component';
 import { TimeService } from '../services/time/time.service';
 import { ListComponent } from './list/list.component';
+import { SuggestComponent } from './suggest/suggest.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { ListComponent } from './list/list.component';
     TodoListComponent,
     HeaderComponent,
     DetailComponent,
-    ListComponent
+    ListComponent,
+    SuggestComponent
   ],
   providers: [ TimeService ]
 })

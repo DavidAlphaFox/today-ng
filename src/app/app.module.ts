@@ -20,13 +20,14 @@ import { LocalStorageService } from './services/local-storage/local-storage.serv
 import { TodoService } from './services/todo/todo.service';
 import { ListService } from './services/list/list.service';
 import { SummaryService } from './services/summary/summary.service';
+import { InitGuardService } from './services/init-guard/init-guard.service';
 
 // Register locale for ng-zorro-antd.
 registerLocaleData(zh);
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
+  declarations: [ AppComponent ],
+  imports     : [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -39,13 +40,14 @@ registerLocaleData(zh);
     SummaryModule,
     SetupModule
   ],
-  providers: [
+  providers   : [
     TodoService,
     ListService,
+    SummaryService,
     LocalStorageService,
-    { provide: NZ_I18N, useValue: zh_CN },
-    SummaryService
+    InitGuardService,
+    { provide: NZ_I18N, useValue: zh_CN }, // ng-zorro i18n
   ],
-  bootstrap: [AppComponent]
+  bootstrap   : [ AppComponent ]
 })
 export class AppModule {}

@@ -1,16 +1,18 @@
 <ul nz-menu
     nzTheme="dark">
   <li nz-menu-item
-      [nzSelected]="true"
+      [nzSelected]="currentList === 'today'"
       (click)="click('today')">
     <i class="anticon anticon-home"></i> Today
   </li>
   <li nz-menu-item
-      (click)="click('todo')">
+      (click)="click('todo')"
+      [nzSelected]="currentList === 'todo'">
     <i class="anticon anticon-calendar"></i> To-Do
   </li>
   <li nz-menu-item
       *ngFor="let list of lists"
+      [nzSelected]="currentList === list._id"
       (click)="click(list._id)"
       (contextmenu)="contextMenu($event, contextTemplate, list._id)">
     <i class="anticon anticon-bars"></i> {{ list.title }}

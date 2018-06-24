@@ -25,9 +25,9 @@ export class DetailComponent implements OnInit {
   @Output() changedTodo = new EventEmitter();
 
   private trueSource: Todo;
-  private currentTodo: Todo;
-  private dueDate: Date;
-  private planDate: Date;
+  currentTodo: Todo;
+  dueDate: Date;
+  planDate: Date;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,11 +51,11 @@ export class DetailComponent implements OnInit {
     });
   }
 
-  private goBack(): void {
+  goBack(): void {
     this.router.navigateByUrl('main');
   }
 
-  private handlePlanDateChange(date: Date): void {
+  handlePlanDateChange(date: Date): void {
     const t = date ? date.getTime() : undefined;
     if (!t) {
       this.currentTodo.notifyMe = false;
@@ -64,7 +64,7 @@ export class DetailComponent implements OnInit {
     this.checkDate();
   }
 
-  private handleDueDateChange(date: Date): void {
+  handleDueDateChange(date: Date): void {
     const dueAt = date ? date.getTime() : undefined;
     this.currentTodo.dueAt = dueAt;
     if (dueAt && lessThanADay(dueAt)) {
@@ -84,13 +84,13 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  private dueDisabledDate = (d: Date): boolean => floorToDate(d) < getTodayTime();
-  private planDisabledDate = (d: Date): boolean => {
+  dueDisabledDate = (d: Date): boolean => floorToDate(d) < getTodayTime();
+  planDisabledDate = (d: Date): boolean => {
     console.log(d);
     return floorToMinute(d) < getCurrentTime();
   }
 
-  private clickSwitch(): void {
+  clickSwitch(): void {
     if (!!this.currentTodo.completedFlag) { return; }
     if (!this.currentTodo.planAt) {
       this.message.warning('尚未设置计划日期');
@@ -99,12 +99,12 @@ export class DetailComponent implements OnInit {
     this.currentTodo.notifyMe = !this.currentTodo.notifyMe;
   }
 
-  private confirm(): void {
+  confirm(): void {
     this.todoService.update(this.currentTodo);
     this.goBack();
   }
 
-  private delete(): void {
+  delete(): void {
     this.todoService.delete(this.currentTodo._id);
     this.goBack();
   }
