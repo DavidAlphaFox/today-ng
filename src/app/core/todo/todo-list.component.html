@@ -18,7 +18,7 @@
           <label nz-checkbox
                  (click)="$event.stopPropagation()"
                  [(ngModel)]="item.completedFlag"
-                 (ngModelChange)="handleToggleComplete(item._id)"></label>
+                 (ngModelChange)="toggle(item._id)"></label>
           <span [class.strikethrough]="item.completedFlag">
             {{ item.title }}
           </span>
@@ -47,7 +47,7 @@
 <ng-template #todoContextRef>
   <ul nz-menu
       nzInDropDown
-      (nzClick)="close($event)">
+      (nzClick)="close()">
     <li nz-menu-item
         (click)="setToday()">
       <i class="anticon anticon-home anticon-right-margin"></i>

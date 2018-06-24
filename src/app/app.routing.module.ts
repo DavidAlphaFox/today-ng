@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'summary', component: SummaryComponent, canActivate: [ InitGuardService ] },
   { path: 'setting', component: SettingComponent, canActivate: [ InitGuardService ] },
   { path: 'setup', component: SetupComponent, canActivate: [ InitGuardService ] },
-  { path: 'main', redirectTo: '/main', pathMatch: 'full', canActivate: [ InitGuardService ] },
+  { path: 'main', redirectTo: '/main', pathMatch: 'full' },
   { path: '', redirectTo: '/main', pathMatch: 'full' }
 ];
 

@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CoreComponent } from './core.component';
 import { DetailComponent } from './detail/detail.component';
+import { InitGuardService } from '../services/init-guard/init-guard.service';
+
 
 const routes: Routes = [
   {
-    path: 'main',
-    component: CoreComponent,
-    children: [
+    path            : 'main',
+    component       : CoreComponent,
+    canActivate     : [ InitGuardService ],
+    children        : [
       {
-        path: ':id',
+        path     : ':id',
         component: DetailComponent,
         pathMatch: 'full'
       }
@@ -21,4 +24,4 @@ const routes: Routes = [
   imports: [ RouterModule.forChild(routes) ],
   exports: [ RouterModule ]
 })
-export class CoreRoutingModule { }
+export class CoreRoutingModule {}

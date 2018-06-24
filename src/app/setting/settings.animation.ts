@@ -10,7 +10,7 @@ export const pageSwitchTransition = trigger('pageSwitchTransition', [
   ),
   transition(':leave',
     query('div.full-screen', [
-      animate('200ms', style({ transform: 'translate3d(0, 15%, 0)' }))
+      animate('200ms', style({ transform: 'translate3d(0, 15%, 0)', opacity: 0 }))
     ])
   )
 ]);

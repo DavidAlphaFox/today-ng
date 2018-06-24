@@ -33,11 +33,11 @@ export class TodoListComponent implements OnInit {
 
   ngOnInit() {}
 
-  private handleToggleComplete(id: string): void {
+  toggle(id: string): void {
     this.todoToggle.next(id);
   }
 
-  private contextMenu(
+  contextMenu(
     $event: MouseEvent,
     template: TemplateRef<void>,
     uuid: string
@@ -46,17 +46,17 @@ export class TodoListComponent implements OnInit {
     this.currentContext = uuid;
   }
 
-  private delete(): void {
+  delete(): void {
     this.todoDelete.next(this.currentContext);
     this.currentContext = '';
   }
 
-  private setToday(): void {
+  setToday(): void {
     this.todoToday.next(this.currentContext);
     this.currentContext = '';
   }
 
-  private close(e: NzMenuItemDirective): void {
+  close(): void {
     this.dropdown.close();
   }
 }
