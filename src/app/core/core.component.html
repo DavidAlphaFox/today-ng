@@ -40,7 +40,7 @@
   <nz-content>
     <nz-layout>
       <nz-header style="background-color: white; height: 180px; padding: 0;">
-
+        <app-header></app-header>
       </nz-header>
       <nz-content>
         <!-- a list of 'todos' -->
@@ -79,7 +79,8 @@
         <input nz-input
                #todoInput
                placeholder="想要做什么？"
-               name="todoTitle">
+               name="todoTitle"
+               (keydown.enter)="handleAddTodoOk(todoInput.value); todoInput.value = '';">
       </nz-form-control>
     </nz-form-item>
   </form>
@@ -99,7 +100,9 @@
       <nz-form-control>
         <input nz-input
                #listInput
-               name="listTitle">
+               name="listTitle"
+               placeholder="列表名称"
+               (keydown.enter)="handleAddListOk(listInput.value); listInput.value = '';">
       </nz-form-control>
     </nz-form-item>
   </form>
@@ -119,7 +122,9 @@
       <nz-form-control>
         <input nz-input
                #listRenameInput
-               name="renameListTitle">
+               placeholder="列表名称"
+               name="renameListTitle"
+               (keydown.enter)="renameList(listRenameInput.value); listRenameInput.value = '';">
       </nz-form-control>
     </nz-form-item>
   </form>
