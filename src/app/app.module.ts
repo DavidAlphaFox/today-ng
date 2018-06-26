@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -46,7 +46,8 @@ registerLocaleData(zh);
     SummaryService,
     LocalStorageService,
     InitGuardService,
-    { provide: NZ_I18N, useValue: zh_CN }, // ng-zorro i18n
+    { provide: NZ_I18N, useValue: zh_CN },
+    { provide: LOCALE_ID, useValue: 'zh-Hans'}
   ],
   bootstrap   : [ AppComponent ]
 })

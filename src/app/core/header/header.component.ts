@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RankBy } from '../../../domain/types';
 
 @Component({
@@ -7,6 +7,7 @@ import { RankBy } from '../../../domain/types';
   styleUrls: [ './header.component.less' ]
 })
 export class HeaderComponent implements OnInit {
+  @Input() listTitle: string;
   @Output() rankerChange = new EventEmitter<RankBy>();
 
   constructor() { }

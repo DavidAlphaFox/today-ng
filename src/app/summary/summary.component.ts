@@ -18,7 +18,6 @@ import { pageSwitchTransition } from './summary.animation';
   animations : [ pageSwitchTransition ]
 })
 export class SummaryComponent implements OnInit {
-  avatar = this.store.get(AVATAR_CODE);
   username = this.store.get(USERNAME) || 'username';
   dateCount = (getTodayTime() - this.store.get(START_USING_DATE)) / ONE_DAY + 1;
 

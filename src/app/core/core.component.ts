@@ -15,6 +15,7 @@ import { Todo, List } from '../../domain/entities';
 import { RankBy } from '../../domain/types';
 import { floorToDate } from '../../utils/time';
 import { mainPageSwitchTransition } from './core.animation';
+import { current } from 'codelyzer/util/syntaxKind';
 
 
 const rankerGenerator = (type: RankBy = 'title'): any => {
@@ -37,16 +38,17 @@ export class CoreComponent implements OnInit, OnDestroy {
 
   private todos$: Subscription;
   private lists$: Subscription;
+  private currentList$: Subscription;
   private rankerSource = new Subject<RankBy>();
 
   addTodoModalVisible = false;
   addListModalVisible = false;
   renameListModalVisible = false;
-  templateListUUID: string;
+  currentList: List;
+  temporaryListUUID: string;
 
   innerTodos: Todo[] = [];
   innerLists: List[] = [];
-  avatar = this.store.get(AVATAR_CODE);
   username = this.store.get(USERNAME);
 
   @HostBinding('@mainPageSwitchTransition') state = 'activated';
@@ -62,6 +64,7 @@ export class CoreComponent implements OnInit, OnDestroy {
     private store: LocalStorageService
   ) { }
 
+  /* An callback invoked when a key is pressed. */
   private keyboard$: any;
 
   ngOnInit() {
@@ -73,19 +76,21 @@ export class CoreComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.lists$) { this.lists$.unsubscribe(); }
     if (this.todos$) { this.todos$.unsubscribe(); }
+    if (this.currentList$) {this.currentList$.unsubscribe(); }
     window.removeEventListener('keydown', this.keyboard$);
   }
 
   private makeSubscriptions(): void {
     const listSource = this.listService.getSubject();
-    const currentUUIDSource = this.listService.getCurrentSubject();
+    const currentUUIDSource = this.listService.getCurrentListSubject();
     const todoSource = this.todoService.getSubject();
-    const combined = currentUUIDSource.pipe(
-      combineLatest(todoSource, this.rankerSource),
-    );
+    const combined = currentUUIDSource.pipe(combineLatest(todoSource, this.rankerSource));
 
     this.lists$ = listSource.subscribe(lists => {
       this.innerLists = [].concat(lists);
+    });
+    this.currentList$ = currentUUIDSource.subscribe(uuid => {
+      this.currentList = this.innerLists.find(l => l._id === uuid);
     });
     this.todos$ = combined.subscribe(sources => {
       this.processTodos(sources[ 0 ], sources[ 1 ], sources[ 2 ]);
@@ -105,7 +110,7 @@ export class CoreComponent implements OnInit, OnDestroy {
 
     // command+I to create a new todo
     if (e.keyCode === 73 && (e.metaKey || e.ctrlKey)) {
-      if (e.altKey) { return; } // dev tools!
+      if (e.altKey) { return; }
       this.showAddTodoModal();
       return;
     }
@@ -139,22 +144,18 @@ export class CoreComponent implements OnInit, OnDestroy {
     setTimeout(() => { this.todoInput.nativeElement.focus(); });
   }
 
-  closeAddTodoModal(): void {
-    this.addTodoModalVisible = false;
-  }
+  closeAddTodoModal(): void { this.addTodoModalVisible = false; }
 
   showAddListModal(): void {
     this.addListModalVisible = true;
     setTimeout(() => { this.listInput.nativeElement.focus(); });
   }
 
-  closeAddListModal(): void {
-    this.addListModalVisible = false;
-  }
+  closeAddListModal(): void { this.addListModalVisible = false; }
 
   showRenameListModal(uuid: string): void {
     this.renameListModalVisible = true;
-    this.templateListUUID = uuid;
+    this.temporaryListUUID = uuid;
     setTimeout(() => {
       const title = this.innerLists.find(l => l._id === uuid).title;
       this.listRenameInput.nativeElement.value = title;
@@ -162,9 +163,7 @@ export class CoreComponent implements OnInit, OnDestroy {
     });
   }
 
-  closeRenameListModal(): void {
-    this.renameListModalVisible = false;
-  }
+  closeRenameListModal(): void { this.renameListModalVisible = false; }
 
   /* events on lists */
   handleAddListOk(title: string): void {
@@ -189,11 +188,11 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
   renameList(title: string): void {
-    const list = this.innerLists.find(l => l._id === this.templateListUUID);
+    const list = this.innerLists.find(l => l._id === this.temporaryListUUID);
     list.title = title;
     this.listService.update(list);
     this.closeRenameListModal();
-    this.templateListUUID = '';
+    this.temporaryListUUID = '';
   }
 
   clickList(uuid: string): void {

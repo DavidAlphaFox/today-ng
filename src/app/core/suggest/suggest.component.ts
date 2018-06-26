@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-
 import { Todo } from '../../../domain/entities';
 import { TodoService } from '../../services/todo/todo.service';
 import { floorToDate, getTodayTime, ONE_DAY } from '../../../utils/time';
 
 
 @Component({
-  selector   : 'app-suggest',
+  selector: 'app-suggest',
   templateUrl: './suggest.component.html',
-  styleUrls  : [ './suggest.component.less' ]
+  styleUrls: [ './suggest.component.less' ]
 })
 export class SuggestComponent implements OnInit, OnDestroy {
   suggestedTodo: Todo[] = [];
@@ -37,7 +36,5 @@ export class SuggestComponent implements OnInit, OnDestroy {
     this.todo$.unsubscribe();
   }
 
-  setTodoToday(todo: Todo): void {
-    this.todoService.setTodoToday(todo._id);
-  }
+  setTodoToday(todo: Todo): void { this.todoService.setTodoToday(todo._id); }
 }

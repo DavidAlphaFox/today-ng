@@ -1,7 +1,16 @@
-export const APP_INFO_NAMESPACE = 'APP_INFO_NAMESPACE' + '.';
-export const INIT_FLAG = APP_INFO_NAMESPACE + 'INIT_FLAG';
-export const START_USING_DATE = APP_INFO_NAMESPACE + 'START_USING_DATE';
+export const GLOBAL_NAMESPACE = 'today.';
 
-export const USER_INFO_NAMESPACE = 'USER_INFO_NAMESPACE' + '.';
-export const USERNAME = USER_INFO_NAMESPACE + 'user';
-export const AVATAR_CODE = USER_INFO_NAMESPACE + 'AVATAR_CODE';
+export const APP_INFO_NAMESPACE = GLOBAL_NAMESPACE + 'appInfo.';
+export const INIT_FLAG = APP_INFO_NAMESPACE + 'initFlag';
+export const START_USING_DATE = APP_INFO_NAMESPACE + 'startUsingDate';
+
+export const USER_INFO_NAMESPACE = GLOBAL_NAMESPACE + 'userInfo.';
+export const USERNAME = USER_INFO_NAMESPACE + 'username';
+export const AVATAR_CODE = USER_INFO_NAMESPACE + 'avatarCode';
+
+export const TODO_NAMESPACE = 'todo.';
+export const TODOS = TODO_NAMESPACE + 'todos';
+
+
+export const LIST_NAMESPACE = 'list.';
+export const LISTS = LIST_NAMESPACE + 'lists';

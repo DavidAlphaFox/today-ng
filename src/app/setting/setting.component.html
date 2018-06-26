@@ -7,32 +7,9 @@
   </div>
   <div class="content">
     <div class="body">
-      <nz-upload class="avatar-uploader"
-                 nzAction=""
-                 nzName="avatar"
-                 nzListType="picture-card"
-                 [nzShowUploadList]="false"
-                 (nzChange)="handleAvatarImageChange($event)">
-        <ng-container *ngIf="!avatar">
-          <i class="anticon anticon-plus"></i>
-          <div class="ant-upload-text">
-            设置头像
-          </div>
-        </ng-container>
-        <img *ngIf="avatar"
-             [src]="avatar"
-             class="avatar">
-      </nz-upload>
-      <nz-divider nzType="horizontal"
-                  nzText="用户名"></nz-divider>
-      <input nz-input
-             #usernameInput
-             [nzSize]="'large'"
-             placeholder="用户名"
+      <nz-divider nzType="horizontal" nzText="用户名"></nz-divider>
+      <input nz-input #usernameInput [nzSize]="'large'" placeholder="用户名"
              (blur)="validateUsername(usernameInput.value)">
-      <nz-divider nzType="horizontal"
-                  nzText="应用选项"></nz-divider>
-
     </div>
   </div>
 </div>

@@ -1,13 +1,8 @@
-<nz-layout class="container">
+<nz-layout class="full-screen">
   <nz-sider [nzWidth]="260">
     <div class="profile-container">
-      <div class="back-btn floating-btn"
-           (click)="goBack()">
+      <div class="back-btn floating-btn" (click)="goBack()">
         <span class="anticon anticon-left"></span>
-      </div>
-      <div class="avatar-container"
-           *ngIf="avatar">
-        <img [src]="avatar">
       </div>
       <div class="username">
         {{ username }}
@@ -29,5 +24,7 @@
 </ng-template>
 
 <ng-template #yearTableCell>
-  <div class="year-cell-wrapper"></div>
+  <div class="year-cell-wrapper">
+    {{ requestForMonth(1) }}
+  </div>
 </ng-template>

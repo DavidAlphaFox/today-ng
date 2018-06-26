@@ -1,20 +1,35 @@
-.setup-container {
-  display: flex;
+.header {
+  color: white;
 }
 
-p {
-  margin: 12px auto;
-  font-size: 14px;
+nz-content {
+  padding: 30px;
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 550px;
+    padding: 50px 20px;
+    border-radius: 16px;
+    background-color: white;
+
+
+    p {
+      align-self: left;
+    }
+
+    input {
+      margin-top: 26px;
+      width: 420px;
+    }
+
+    button {
+      margin-top: 26px;
+    }
+  }
 }
 
-.avatar {
-  max-width: 240px;
-  max-height: 240px;
-}
-
-.avatar-preview {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 16px;
-  border-radius: 50%;
+nz-footer {
+  text-align: center;
 }

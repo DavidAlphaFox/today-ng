@@ -1,49 +1,36 @@
-<nz-layout class="container">
-  <nz-sider nzCollapsible
-            [(nzCollapsed)]="isCollapsed"
-            [nzWidth]="260">
+<nz-layout class="full-screen">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzWidth]="260">
     <div class="header-wrapper">
-      <nz-avatar *ngIf="avatar"
-                 nzText="avatar"
-                 nzSize="large"
-                 [nzSrc]="avatar">
-      </nz-avatar>
-      <span class="username-text">
+      <div class="username-text">
         {{ username }}
-      </span>
-      <div (click)="goSettings()"
-           class="floating-btn header-btn">
+      </div>
+      <div (click)="goSettings()" class="floating-btn header-btn">
         <i class="anticon anticon-setting"></i>
       </div>
-      <div (click)="goSummary()"
-           class="floating-btn header-btn">
+      <div (click)="goSummary()" class="floating-btn header-btn">
         <i class="anticon anticon-calendar"></i>
       </div>
     </div>
     <div class="list-wrapper">
-      <!-- a list of 'lists' -->
-      <app-list [lists]="innerLists"
+      <app-list [lists]="innerLists" [collapsed]="isCollapsed"
                 (clickList)="clickList($event)"
                 (renameList)="showRenameListModal($event)"
                 (deleteList)="confirmDeleteList($event)">
       </app-list>
-      <div style="text-align: center; margin-top: 8px;">
-        <button nz-button
-                nzGhost
-                nzType="dashed"
-                (click)="showAddListModal()">
-          添加列表
+      <div class="add-list-btn-wrapper">
+        <button nz-button nzGhost nzType="dashed" (click)="showAddListModal()" [nzShape]="isCollapsed">
+          <i class="anticon anticon-plus"></i>
+          <span *ngIf="!isCollapsed">添加列表</span>
         </button>
       </div>
     </div>
   </nz-sider>
   <nz-content>
     <nz-layout>
-      <nz-header style="background-color: white; height: 180px; padding: 0;">
-        <app-header (rankerChange)="handleRankerChange($event)"></app-header>
+      <nz-header class="todo-header">
+        <app-header [listTitle]="currentList?.title" (rankerChange)="handleRankerChange($event)"></app-header>
       </nz-header>
       <nz-content>
-        <!-- a list of 'todos' -->
         <app-todo-list [todos]="innerTodos"
                        (todoClick)="handleTodoClick($event)"
                        (todoDelete)="deleteTodo($event)"
@@ -55,15 +42,9 @@
   </nz-content>
 </nz-layout>
 
-<button nz-button
-        nzType="primary"
-        nzShape="circle"
-        nzSize="large"
-        class="floating-button"
-        (click)="showAddTodoModal()">
-  <i class="anticon anticon-plus"></i>
-</button>
+<app-floating-btn class="floating-button" (click)="showAddTodoModal()"></app-floating-btn>
 
+<!-- Can these be components? -->
 <nz-modal [(nzVisible)]="addTodoModalVisible"
           [nzTitle]="'添加新待办事项'"
           [nzClosable]="true"

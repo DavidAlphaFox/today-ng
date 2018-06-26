@@ -12,6 +12,7 @@ import { DetailComponent } from './detail/detail.component';
 import { TimeService } from '../services/time/time.service';
 import { ListComponent } from './list/list.component';
 import { SuggestComponent } from './suggest/suggest.component';
+import { FloatingBtnComponent } from './floating-btn/floating-btn.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { SuggestComponent } from './suggest/suggest.component';
     HeaderComponent,
     DetailComponent,
     ListComponent,
-    SuggestComponent
+    SuggestComponent,
+    FloatingBtnComponent
   ],
   providers: [ TimeService ]
 })

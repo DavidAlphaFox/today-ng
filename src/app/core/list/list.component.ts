@@ -6,11 +6,12 @@ import { ListService } from '../../services/list/list.service';
 
 
 @Component({
-  selector   : 'app-list',
+  selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrls  : [ './list.component.css' ]
+  styleUrls: [ './list.component.css' ]
 })
 export class ListComponent implements OnInit, OnDestroy {
+  @Input() collapsed: boolean;
   @Input() lists: List;
   @Output() contextList = new EventEmitter<string>();
   @Output() renameList = new EventEmitter<string>();
@@ -22,43 +23,44 @@ export class ListComponent implements OnInit, OnDestroy {
   public currentList: string;
   private currentList$: Subscription;
 
-  constructor (
+  constructor(
     private dropdownService: NzDropdownService,
     private listService: ListService
-  ) { }
+  ) {
+  }
 
-  ngOnInit () {
-    this.currentList$ = this.listService.getCurrentSubject().subscribe((uuid => {
+  ngOnInit() {
+    this.currentList$ = this.listService.getCurrentListSubject().subscribe((uuid => {
       this.currentList = uuid;
     }));
 
     this.listService.getAll();
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.currentList$.unsubscribe();
   }
 
-  click (uuid: string): void {
+  click(uuid: string): void {
     this.clickList.next(uuid);
   }
 
-  contextMenu ($event: MouseEvent, template: TemplateRef<void>, uuid: string): void {
+  contextMenu($event: MouseEvent, template: TemplateRef<void>, uuid: string): void {
     this.dropdown = this.dropdownService.create($event, template);
     this.currentContext = uuid;
   }
 
-  rename (): void {
+  rename(): void {
     this.renameList.next(this.currentContext);
     this.currentContext = '';
   }
 
-  delete (): void {
+  delete(): void {
     this.deleteList.next(this.currentContext);
     this.currentContext = '';
   }
 
-  close (e: NzMenuItemDirective): void {
+  close(e: NzMenuItemDirective): void {
     this.dropdown.close();
   }
 }

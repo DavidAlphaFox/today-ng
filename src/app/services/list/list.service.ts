@@ -31,7 +31,7 @@ export class ListService {
     return this.lists$;
   }
 
-  getCurrentSubject(): Subject<string> {
+  getCurrentListSubject(): Subject<string> {
     return this.currentUUID$;
   }
 

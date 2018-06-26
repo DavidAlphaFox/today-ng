@@ -1,34 +1,19 @@
-.container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
 .floating-button {
   position: fixed;
-  right: 80px;
-  bottom: 60px;
-}
-
-.detail-wrapper {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 500px;
-  background: black;
+  right: 20px;
+  bottom: 48px;
 }
 
 .header-wrapper {
   padding: 10px;
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
 
   .username-text {
     flex: 1;
-    padding-left: 10px;
+    min-width: 60px;
     color: white;
     font-size: 14px;
     line-height: 40px;
@@ -48,5 +33,15 @@
   bottom: 48px;
   width: 100%;
   padding-bottom: 20px;
+
+  .add-list-btn-wrapper {
+    margin-top: 8px;
+    text-align: center;
+  }
 }
 
+.todo-header {
+  height: 180px;
+  padding: 0;
+  background-color: white;
+}

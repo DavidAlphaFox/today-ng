@@ -1,37 +1,33 @@
-<ul nz-menu
-    nzTheme="dark">
-  <li nz-menu-item
-      [nzSelected]="currentList === 'today'"
-      (click)="click('today')">
-    <i class="anticon anticon-home"></i> Today
+<ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'" [nzInlineCollapsed]="collapsed">
+  <li nz-menu-item [nzSelected]="currentList === 'today'" (click)="click('today')">
+    <span>
+      <i class="anticon anticon-home"></i>
+      <span class="nav-text">Today</span>
+    </span>
   </li>
-  <li nz-menu-item
-      (click)="click('todo')"
-      [nzSelected]="currentList === 'todo'">
-    <i class="anticon anticon-calendar"></i> To-Do
+  <li nz-menu-item (click)="click('todo')" [nzSelected]="currentList === 'todo'">
+    <span>
+      <i class="anticon anticon-calendar"></i>
+      <span class="nav-text">To-Do</span>
+    </span>
   </li>
-  <li nz-menu-item
-      *ngFor="let list of lists"
-      [nzSelected]="currentList === list._id"
-      (click)="click(list._id)"
-      (contextmenu)="contextMenu($event, contextTemplate, list._id)">
-    <i class="anticon anticon-bars"></i> {{ list.title }}
+  <li nz-menu-item *ngFor="let list of lists" [nzSelected]="currentList === list._id"
+      (click)="click(list._id)" (contextmenu)="contextMenu($event, contextTemplate, list._id)">
+    <span>
+      <i class="anticon anticon-bars"></i>
+      <span class="nav-text">{{ list.title }}</span>
+    </span>
   </li>
 </ul>
 
 <ng-template #contextTemplate>
-  <ul nz-menu
-      nzInDropDown
-      nzSelectable
-      (nzClick)="close($event)">
-    <li nz-menu-item
-        (click)="rename()">
+  <ul nz-menu nzInDropDown nzSelectable (nzClick)="close($event)">
+    <li nz-menu-item (click)="rename()">
       <i class="anticon anticon-edit anticon-right-margin"></i>
       <span>重命名</span>
     </li>
     <li nz-menu-divider></li>
-    <li nz-menu-item
-        (click)="delete()">
+    <li nz-menu-item (click)="delete()">
       <i class="anticon anticon-delete anticon-right-margin danger"></i>
       <span class="danger">删除列表</span>
     </li>
