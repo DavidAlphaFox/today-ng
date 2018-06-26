@@ -1,18 +1,38 @@
 <div class="full-screen setting-container">
-  <div class="back-btn floating-btn" (click)="goBack()">
+  <div class="back-btn floating-btn"
+       (click)="goBack()">
     <span>
       <i class="anticon anticon-left"></i>
     </span>
   </div>
   <div class="content">
     <div class="body">
-      <div class="header">
-        <img *ngIf="avatar" [src]="avatar" class="avatar">
-        <input nz-input #usernameInput [nzSize]="'large'" placeholder="用户名" (blur)="validateUsername(usernameInput.value)">
-      </div>
-    </div>
-    <div class="sticky-footer">
-      Today © 2018 By Wendell Hu
+      <nz-upload class="avatar-uploader"
+                 nzAction=""
+                 nzName="avatar"
+                 nzListType="picture-card"
+                 [nzShowUploadList]="false"
+                 (nzChange)="handleAvatarImageChange($event)">
+        <ng-container *ngIf="!avatar">
+          <i class="anticon anticon-plus"></i>
+          <div class="ant-upload-text">
+            设置头像
+          </div>
+        </ng-container>
+        <img *ngIf="avatar"
+             [src]="avatar"
+             class="avatar">
+      </nz-upload>
+      <nz-divider nzType="horizontal"
+                  nzText="用户名"></nz-divider>
+      <input nz-input
+             #usernameInput
+             [nzSize]="'large'"
+             placeholder="用户名"
+             (blur)="validateUsername(usernameInput.value)">
+      <nz-divider nzType="horizontal"
+                  nzText="应用选项"></nz-divider>
+
     </div>
   </div>
 </div>

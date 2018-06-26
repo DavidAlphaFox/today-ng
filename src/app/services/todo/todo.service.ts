@@ -15,7 +15,7 @@ export class TodoService {
   constructor(
     private listService: ListService,
     private store: LocalStorageService
-  ) {}
+  ) { }
 
   private broadCast(): void {
     this.todo$.next(this.todos);
@@ -39,11 +39,11 @@ export class TodoService {
   }
 
   getByUUID(uuid: string): Todo | null {
-    return this.todos.filter((todo: Todo) => todo._id === uuid)[0] || null;
+    return this.todos.filter((todo: Todo) => todo._id === uuid)[ 0 ] || null;
   }
 
   setTodoToday(uuid: string): void {
-    const todo = this.todos.find(t => t._id === uuid);
+    const todo = this.getByUUID(uuid);
     if (todo && !todo.completedFlag) {
       todo.planAt = floorToMinute(new Date()) + ONE_HOUR;
       this.update(todo);
@@ -51,11 +51,19 @@ export class TodoService {
   }
 
   toggleTodoComplete(uuid: string): void {
-    const todo = this.todos.find(t => t._id === uuid);
+    const todo = this.getByUUID(uuid);
     if (todo) {
       todo.completedFlag = !todo.completedFlag;
       todo.completedAt = todo.completedFlag ? getCurrentTime() : undefined;
       this.persist();
+    }
+  }
+
+  removeToList(uuid: string, listUUID: string): void {
+    const todo = this.getByUUID(uuid);
+    if (todo) {
+      todo.listUUID = listUUID;
+      this.update(todo);
     }
   }
 

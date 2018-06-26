@@ -27,10 +27,10 @@ const rankerGenerator = (type: RankBy = 'title'): any => {
 };
 
 @Component({
-  selector   : 'app-core',
+  selector: 'app-core',
   templateUrl: './core.component.html',
-  styleUrls  : [ './core.component.less' ],
-  animations : [ mainPageSwitchTransition ]
+  styleUrls: [ './core.component.less' ],
+  animations: [ mainPageSwitchTransition ]
 })
 export class CoreComponent implements OnInit, OnDestroy {
   isCollapsed = false;
@@ -97,8 +97,8 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
   private keyboardHandler(e: KeyboardEvent): void {
-    // command+U to create a new list
-    if (e.keyCode === 85 && (e.metaKey || e.ctrlKey)) {
+    // command+B to create a new list
+    if (e.keyCode === 66 && (e.metaKey || e.ctrlKey)) {
       this.showAddListModal();
       return;
     }
@@ -177,9 +177,9 @@ export class CoreComponent implements OnInit, OnDestroy {
     const list = this.innerLists[ i ];
 
     this.modal.confirm({
-      nzTitle  : '确认删除列表',
+      nzTitle: '确认删除列表',
       nzContent: '该操作会导致该列表下的所有待办事项被删除',
-      nzOnOk   : () =>
+      nzOnOk: () =>
         new Promise((res, rej) => {
           this.listService.delete(uuid);
           this.todoService.deleteInList(uuid);

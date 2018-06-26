@@ -1,16 +1,16 @@
 import { Component, ElementRef, Host, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, UploadFile } from 'ng-zorro-antd';
 import { LocalStorageService } from '../services/local-storage/local-storage.service';
 import { AVATAR_CODE, USERNAME } from '../services/local-storage/local-storage.namespace';
 import { pageSwitchTransition } from './settings.animation';
 
 
 @Component({
-  selector   : 'app-setting',
+  selector: 'app-setting',
   templateUrl: './setting.component.html',
-  styleUrls  : [ './setting.component.less' ],
-  animations : [ pageSwitchTransition ]
+  styleUrls: [ './setting.component.less' ],
+  animations: [ pageSwitchTransition ]
 })
 export class SettingComponent implements OnInit {
   avatar = this.store.get(AVATAR_CODE);
@@ -38,6 +38,20 @@ export class SettingComponent implements OnInit {
       this.store.set(USERNAME, username);
       this.message.success('用户名已修改');
     }
+  }
+
+  private getBase64(img: File, callback: (img: {}) => void): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  handleAvatarImageChange(info: { file: UploadFile }): void {
+    // This method would be triggered three times, I guess it's a bug of ng-zorro-antd.
+    this.getBase64(info.file.originFileObj, (img: string) => {
+      this.avatar = img;
+      this.store.set(AVATAR_CODE, img);
+    });
   }
 
   goBack(): void {
