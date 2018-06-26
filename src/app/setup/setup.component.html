@@ -6,8 +6,9 @@
   </nz-header>
   <nz-content>
     <div class="wrapper">
+      <img class="logo-img" src="./assets/img/logo.png" alt="">
       <p>
-        欢迎使用 Today，让我们来进行一些初次使用所需要的设置。
+        欢迎使用 Today，让我们来进行一些初次使用所需要的设置
       </p>
       <input nz-input placeholder="请输入你喜欢的用户名" #usernameInput [(ngModel)]="username">
       <button nz-button [nzType]="'primary'" (click)="completeSetup()" [disabled]="!usernameInput.value" >

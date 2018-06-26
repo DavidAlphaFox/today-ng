@@ -23,7 +23,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css",
+              "node_modules/ng-zorro-antd/src/ng-zorro-antd.less",
               "src/assets/less/index.less"
             ],
             "scripts": []

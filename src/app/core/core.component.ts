@@ -28,10 +28,10 @@ const rankerGenerator = (type: RankBy = 'title'): any => {
 };
 
 @Component({
-  selector: 'app-core',
+  selector   : 'app-core',
   templateUrl: './core.component.html',
-  styleUrls: [ './core.component.less' ],
-  animations: [ mainPageSwitchTransition ]
+  styleUrls  : [ './core.component.less' ],
+  animations : [ mainPageSwitchTransition ]
 })
 export class CoreComponent implements OnInit, OnDestroy {
   isCollapsed = false;
@@ -176,9 +176,9 @@ export class CoreComponent implements OnInit, OnDestroy {
     const list = this.innerLists[ i ];
 
     this.modal.confirm({
-      nzTitle: '确认删除列表',
+      nzTitle  : '确认删除列表',
       nzContent: '该操作会导致该列表下的所有待办事项被删除',
-      nzOnOk: () =>
+      nzOnOk   : () =>
         new Promise((res, rej) => {
           this.listService.delete(uuid);
           this.todoService.deleteInList(uuid);
@@ -207,33 +207,19 @@ export class CoreComponent implements OnInit, OnDestroy {
     this.closeAddTodoModal();
   }
 
-  handleTodoClick(uuid: string): void {
-    this.router.navigateByUrl(`main/${uuid}`);
-  }
+  handleTodoClick(uuid: string): void { this.router.navigateByUrl(`main/${uuid}`); }
 
-  deleteTodo(uuid: string): void {
-    this.todoService.delete(uuid);
-  }
+  deleteTodo(uuid: string): void { this.todoService.delete(uuid); }
 
-  setToday(uuid: string): void {
-    this.todoService.setTodoToday(uuid);
-  }
+  setToday(uuid: string): void { this.todoService.setTodoToday(uuid); }
 
-  toggleComplete(uuid: string): void {
-    this.todoService.toggleTodoComplete(uuid);
-  }
+  toggleComplete(uuid: string): void { this.todoService.toggleTodoComplete(uuid); }
 
   /* events from header */
-  handleRankerChange(type: RankBy): void {
-    this.rankerSource.next(type);
-  }
+  handleRankerChange(type: RankBy): void { this.rankerSource.next(type); }
 
   /* navigation */
-  goSummary(): void {
-    this.router.navigateByUrl('/summary');
-  }
+  goSummary(): void { this.router.navigateByUrl('/summary'); }
 
-  goSettings(): void {
-    this.router.navigateByUrl('/setting');
-  }
+  goSettings(): void { this.router.navigateByUrl('/setting'); }
 }

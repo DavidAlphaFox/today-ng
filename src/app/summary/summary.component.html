@@ -13,18 +13,18 @@
     </div>
   </nz-sider>
   <nz-content>
-    <nz-calendar [nzDateCell]="monthTableCell"></nz-calendar>
+    <nz-calendar>
+      <ul *nzDateCell="let date" class="todo-list">
+        <div *ngIf="requestForDate(date) as summary" (click)="showSummaryDetail(summary)">
+          <li *ngFor="let item of summary.completedTodos">
+            <nz-badge [nzStatus]="'success'" [nzText]="item"></nz-badge>
+          </li>
+          <li *ngFor="let item of summary.uncompletedTodos">
+            <nz-badge [nzStatus]="'error'" [nzText]="item"></nz-badge>
+          </li>
+        </div>
+      </ul>
+    </nz-calendar>
   </nz-content>
 </nz-layout>
 
-<ng-template #monthTableCell>
-  <div class="month-cell-wrapper">
-    {{ requestForDate(1) }}
-  </div>
-</ng-template>
-
-<ng-template #yearTableCell>
-  <div class="year-cell-wrapper">
-    {{ requestForMonth(1) }}
-  </div>
-</ng-template>

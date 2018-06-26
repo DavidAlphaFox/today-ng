@@ -21,6 +21,7 @@ import { TodoService } from './services/todo/todo.service';
 import { ListService } from './services/list/list.service';
 import { SummaryService } from './services/summary/summary.service';
 import { InitGuardService } from './services/init-guard/init-guard.service';
+import { LoggerService } from './services/logger/logger.service';
 
 // Register locale for ng-zorro-antd.
 registerLocaleData(zh);
@@ -46,6 +47,7 @@ registerLocaleData(zh);
     SummaryService,
     LocalStorageService,
     InitGuardService,
+    LoggerService,
     { provide: NZ_I18N, useValue: zh_CN },
     { provide: LOCALE_ID, useValue: 'zh-Hans'}
   ],

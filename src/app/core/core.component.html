@@ -1,13 +1,14 @@
 <nz-layout class="full-screen">
   <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzWidth]="260">
     <div class="header-wrapper">
-      <div class="username-text">
+      <img src="./assets/img/32314791.png">
+      <span class="username-text" *ngIf="!isCollapsed">
         {{ username }}
-      </div>
-      <div (click)="goSettings()" class="floating-btn header-btn">
+      </span>
+      <div (click)="goSettings()" class="floating-btn header-btn" *ngIf="!isCollapsed">
         <i class="anticon anticon-setting"></i>
       </div>
-      <div (click)="goSummary()" class="floating-btn header-btn">
+      <div (click)="goSummary()" class="floating-btn header-btn" *ngIf="!isCollapsed">
         <i class="anticon anticon-calendar"></i>
       </div>
     </div>

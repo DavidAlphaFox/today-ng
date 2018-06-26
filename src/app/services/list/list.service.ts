@@ -2,21 +2,24 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import { List } from '../../../domain/entities';
+import { LISTS } from '../local-storage/local-storage.namespace';
+import { LoggerService } from '../logger/logger.service';
 
 
 type SpecialListUUID = 'today' | 'todo';
 
 @Injectable()
 export class ListService {
-  private lsKey = 'lists';
-
   private currentUUID: SpecialListUUID | string = 'today';
   private lists: List[] = [];
 
   private currentUUID$ = new Subject<string>();
   private lists$ = new Subject<List[]>();
 
-  constructor(private store: LocalStorageService) { }
+  constructor(
+    private store: LocalStorageService,
+    private logger: LoggerService
+  ) { }
 
   private broadCast(): void {
     this.lists$.next(this.lists);
@@ -24,7 +27,7 @@ export class ListService {
   }
 
   private persist(): void {
-    this.store.set(this.lsKey, this.lists);
+    this.store.set(LISTS, this.lists);
   }
 
   getSubject(): Subject<List[]> {
@@ -36,7 +39,7 @@ export class ListService {
   }
 
   getAll(): void {
-    this.lists = this.store.getList(this.lsKey);
+    this.lists = this.store.getList(LISTS);
     this.broadCast();
   }
 
@@ -53,6 +56,7 @@ export class ListService {
     const newList = new List(title);
     this.lists.push(newList);
     this.currentUUID = newList._id;
+    this.logger.message('[INFO] list created', newList);
     this.broadCast();
     this.persist();
   }

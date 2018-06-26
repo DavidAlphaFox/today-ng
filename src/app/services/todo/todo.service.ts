@@ -1,28 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { NzNotificationService } from 'ng-zorro-antd';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import { ListService } from '../list/list.service';
 import { floorToMinute, ONE_HOUR, getCurrentTime } from '../../../utils/time';
 import { Todo } from '../../../domain/entities';
+import { TODOS } from '../local-storage/local-storage.namespace';
 
 @Injectable()
 export class TodoService {
-  private lsKey = 'todos';
   private todos: Todo[] = [];
   private todo$ = new Subject<Todo[]>();
 
   constructor(
     private listService: ListService,
     private store: LocalStorageService
-  ) { }
+  ) {
+    this.todos = this.store.getList(TODOS);
+  }
 
   private broadCast(): void {
     this.todo$.next(this.todos);
   }
 
   private persist(): void {
-    this.store.set(this.lsKey, this.todos);
+    this.store.set(TODOS, this.todos);
   }
 
   getSubject(): Subject<Todo[]> {
@@ -30,11 +31,12 @@ export class TodoService {
   }
 
   getAll(): void {
-    this.todos = this.store.getList(this.lsKey);
+    this.todos = this.store.getList(TODOS);
     this.broadCast();
   }
 
   getRaw(): Todo[] {
+    // if (!this.todos.length) { this.todos = this.store.getList(TODOS); }
     return this.todos;
   }
 
@@ -84,6 +86,7 @@ export class TodoService {
   update(todo: Todo): void {
     const index = this.todos.findIndex(t => t._id === todo._id);
     if (index !== -1) {
+      todo.completedAt = todo.completedFlag ? getCurrentTime() : undefined;
       this.todos.splice(index, 1, todo);
       this.persist();
       this.broadCast();

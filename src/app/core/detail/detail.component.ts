@@ -85,13 +85,10 @@ export class DetailComponent implements OnInit {
   }
 
   dueDisabledDate = (d: Date): boolean => floorToDate(d) < getTodayTime();
-  planDisabledDate = (d: Date): boolean => {
-    console.log(d);
-    return floorToMinute(d) < getCurrentTime();
-  }
+  planDisabledDate = (d: Date): boolean =>  floorToMinute(d) < getCurrentTime();
 
   clickSwitch(): void {
-    if (!!this.currentTodo.completedFlag) { return; }
+    if (this.currentTodo.completedFlag) { return; }
     if (!this.currentTodo.planAt) {
       this.message.warning('尚未设置计划日期');
       return;
