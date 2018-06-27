@@ -8,7 +8,7 @@
   <li nz-menu-item (click)="click('todo')" [nzSelected]="currentListUuid === 'todo'">
     <span>
       <i class="anticon anticon-calendar"></i>
-      <span class="nav-text">To-Do</span>
+      <span class="nav-text">TODO</span>
     </span>
   </li>
   <li nz-menu-item *ngFor="let list of lists" [nzSelected]="currentListUuid === list._id"
