@@ -9,12 +9,12 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app.routing.module';
-import { CoreModule } from './core/core.module';
-import { SettingModule } from './setting/setting.module';
-import { SummaryModule } from './summary/summary.module';
-import { SplashModule } from './splash/splash.module';
-import { SetupModule } from './setup/setup.module';
+import { AppRoutingModule } from './app-routing.module';
+import { MainModule } from './pages/main/main.module';
+import { SettingModule } from './pages/setting/setting.module';
+import { SummaryModule } from './pages/summary/summary.module';
+import { SplashModule } from './pages/splash/splash.module';
+import { SetupModule } from './pages/setup/setup.module';
 
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 import { TodoService } from './services/todo/todo.service';
@@ -35,7 +35,7 @@ registerLocaleData(zh);
     HttpClientModule,
     NgZorroAntdModule,
     AppRoutingModule,
-    CoreModule,
+    MainModule,
     SplashModule,
     SettingModule,
     SummaryModule,

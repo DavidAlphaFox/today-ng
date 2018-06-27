@@ -10,10 +10,12 @@ type SpecialListUUID = 'today' | 'todo';
 
 @Injectable()
 export class ListService {
-  private currentUUID: SpecialListUUID | string = 'today';
+  private currentUuid: SpecialListUUID | string = 'today';
+  private current: List;
   private lists: List[] = [];
 
-  private currentUUID$ = new Subject<string>();
+  private currentUuid$ = new Subject<string>();
+  private current$ = new Subject<List>();
   private lists$ = new Subject<List[]>();
 
   constructor(
@@ -23,45 +25,19 @@ export class ListService {
 
   private broadCast(): void {
     this.lists$.next(this.lists);
-    this.currentUUID$.next(this.currentUUID);
+    this.current$.next(this.current);
+    this.currentUuid$.next(this.currentUuid);
   }
 
   private persist(): void {
     this.store.set(LISTS, this.lists);
   }
 
-  getSubject(): Subject<List[]> {
-    return this.lists$;
+  private getByUuid(uuid: string): List {
+    return this.lists.find(l => l._id === uuid);
   }
 
-  getCurrentListSubject(): Subject<string> {
-    return this.currentUUID$;
-  }
-
-  getAll(): void {
-    this.lists = this.store.getList(LISTS);
-    this.broadCast();
-  }
-
-  getCurrentUUID(): string | undefined {
-    return this.currentUUID;
-  }
-
-  setCurrentUUID(uuid: string): void {
-    this.currentUUID = uuid;
-    this.broadCast();
-  }
-
-  add(title: string): void {
-    const newList = new List(title);
-    this.lists.push(newList);
-    this.currentUUID = newList._id;
-    this.logger.message('[INFO] list created', newList);
-    this.broadCast();
-    this.persist();
-  }
-
-  update(list: List): void {
+  private update(list: List): void {
     const index = this.lists.findIndex(l => l._id === list._id);
     if (index === -1) {
       this.lists.splice(index, 1, list);
@@ -70,13 +46,57 @@ export class ListService {
     }
   }
 
+  getSubject(): Subject<List[]> {
+    return this.lists$;
+  }
+
+  getCurrentListSubject(): Subject<List> {
+    return this.current$;
+  }
+
+  getCurrentListUuidSubject(): Subject<string> {
+    return this.currentUuid$;
+  }
+
+  getCurrentListUuid(): SpecialListUUID | string {
+    return this.currentUuid;
+  }
+
+  getAll(): void {
+    this.lists = this.store.getList(LISTS);
+    this.broadCast();
+  }
+
+  setCurrentUuid(uuid: string): void {
+    this.currentUuid = uuid;
+    this.current = this.lists.find(l => l._id === uuid);
+    this.broadCast();
+  }
+
+  add(title: string): void {
+    const newList = new List(title);
+    this.lists.push(newList);
+    this.currentUuid = newList._id;
+    this.logger.message('[INFO] list created', newList);
+    this.broadCast();
+    this.persist();
+  }
+
+  rename(listUuid: string, title: string) {
+    const list = this.getByUuid(listUuid);
+    if (list) {
+      list.title = title;
+      this.update(list);
+    }
+  }
+
   delete(uuid: string): void {
     const i = this.lists.findIndex(l => l._id === uuid);
     if (i !== -1) {
       this.lists.splice(i, 1);
-      this.currentUUID = this.lists.length
+      this.currentUuid = this.lists.length
         ? this.lists[ this.lists.length - 1 ]._id
-        : this.currentUUID === 'today'
+        : this.currentUuid === 'today'
           ? 'today'
           : 'todo';
       this.broadCast();

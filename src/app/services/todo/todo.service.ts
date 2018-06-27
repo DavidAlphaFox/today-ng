@@ -5,11 +5,14 @@ import { ListService } from '../list/list.service';
 import { floorToMinute, ONE_HOUR, getCurrentTime } from '../../../utils/time';
 import { Todo } from '../../../domain/entities';
 import { TODOS } from '../local-storage/local-storage.namespace';
+import { RankBy } from '../../../domain/types';
 
 @Injectable()
 export class TodoService {
   private todos: Todo[] = [];
+  private rank: RankBy = 'title';
   private todo$ = new Subject<Todo[]>();
+  private rank$ = new Subject<RankBy>();
 
   constructor(
     private listService: ListService,
@@ -20,6 +23,7 @@ export class TodoService {
 
   private broadCast(): void {
     this.todo$.next(this.todos);
+    this.rank$.next(this.rank);
   }
 
   private persist(): void {
@@ -28,6 +32,10 @@ export class TodoService {
 
   getSubject(): Subject<Todo[]> {
     return this.todo$;
+  }
+
+  getRankSubject(): Subject<RankBy> {
+    return this.rank$;
   }
 
   getAll(): void {
@@ -61,7 +69,7 @@ export class TodoService {
     }
   }
 
-  removeToList(uuid: string, listUUID: string): void {
+  moveToList(uuid: string, listUUID: string): void {
     const todo = this.getByUUID(uuid);
     if (todo) {
       todo.listUUID = listUUID;
@@ -70,7 +78,7 @@ export class TodoService {
   }
 
   add(title: string): void {
-    const listUUID = this.listService.getCurrentUUID();
+    const listUUID = this.listService.getCurrentListUuid();
     const newTodo = new Todo(title, listUUID);
 
     if (listUUID === 'today') {
@@ -105,5 +113,10 @@ export class TodoService {
   deleteInList(uuid: string): void {
     const toDelete = this.todos.filter(t => t.listUUID === uuid);
     toDelete.forEach(t => this.delete(t._id));
+  }
+
+  toggleRank(r: RankBy): void {
+    this.rank = r;
+    this.rank$.next(r);
   }
 }
