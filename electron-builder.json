@@ -1,0 +1,24 @@
+{
+  "productName": "Today",
+  "appId": "com.huwenzhao.Today-ng",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "**/*",
+    "!*.ts",
+    "!*.code-workspace",
+    "!.idea",
+    "!LICENSE",
+    "!package.json",
+    "!package-lock.json",
+    "!src/",
+    "!e2e/",
+    "!hooks/",
+    "!.angular-cli.json",
+    "!_config.yml",
+    "!karma.conf.js",
+    "!tsconfig.json",
+    "!tslint.json"
+  ]
+}
