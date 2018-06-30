@@ -4,7 +4,7 @@ import * as url from 'url';
 
 let window: BrowserWindow;
 const args = process.argv.slice(1);
-const serve = args.some(val => val === '--serve');
+const isDev = args.some(val => val === '--serve');
 
 const createWindow = function () {
   window = new BrowserWindow({
@@ -12,21 +12,18 @@ const createWindow = function () {
     height: 500
   });
 
-  if (serve) {
+  if (isDev) {
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     window.loadURL('http://localhost:4200');
     window.webContents.openDevTools();
   } else {
-    const pathname = path.join(__dirname, 'dist/today-ng/index.html');
-
     window.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/today-ng/index.html'),
       protocol: 'files',
       slashes : true
     }));
-    window.webContents.openDevTools(); // TODO comment this for release
   }
 
   window.on('closed', () => {

@@ -77,9 +77,12 @@ export class ListService {
     const newList = new List(title);
     this.lists.push(newList);
     this.currentUuid = newList._id;
-    this.logger.message('[INFO] list created', newList);
+    this.current = newList;
+
     this.broadCast();
     this.persist();
+
+    this.logger.message('[INFO] list created', newList);
   }
 
   rename(listUuid: string, title: string) {
